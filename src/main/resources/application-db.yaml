@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url:
+    username:
+    password:
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
