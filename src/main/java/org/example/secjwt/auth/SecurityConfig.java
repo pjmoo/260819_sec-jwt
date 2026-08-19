@@ -40,6 +40,8 @@ public class SecurityConfig {
                 // 경로 보안
                 .authorizeHttpRequests(
                         authz -> authz
+                                .requestMatchers("/")
+                                .permitAll()
                                 .requestMatchers(
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",

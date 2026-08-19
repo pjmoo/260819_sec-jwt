@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JWT</title>
+</head>
+<body>
+<h1>로그인</h1>
+<section>
+    <form id="loginForm">
+        <label>유저 이름 : <input name="username"></label><br>
+        <label>비밀번호 : <input name="password" type="password"></label><br>
+        <button>로그인</button>
+    </form>
+</section>
+<script>
+    const loginForm = document.querySelector("#loginForm");
+    loginForm.addEventListener("submit", async (evt) => {
+        evt.preventDefault(); // form 기본 제출 기능 X
+        const formData = new FormData(evt.target);
+        const username = formData.get("username");
+        const password = formData.get("password");
+        const response = await fetch("/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username, password})
+        });
+        console.log(response.json());
+    })
+</script>
+</body>
+</html>
