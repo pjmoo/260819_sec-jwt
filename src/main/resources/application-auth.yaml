@@ -14,3 +14,6 @@ spring:
     user:
       name: user
       password: test
+springdoc:
+  swagger-ui:
+    persist-authorization: true

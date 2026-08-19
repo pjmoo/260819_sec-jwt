@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 public class JwtFilter extends OncePerRequestFilter {
     private final AuthProperties p;
     private final JwtProvider jwtProvider; // claims 해석이 가능
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -32,18 +34,29 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         try {
+            System.out.println("Filter 진입");
             // AccessToken -> 2가지 방법으로 저장
             // 1. header
             // 2. cookie
             // -> Header에 들어가 있다 -> request
+            System.out.println("토큰 추출");
             String token = extractToken(request);
+            System.out.println(token);
+            System.out.println("클레임 추출");
             Claims claims = jwtProvider.parseClaims(token);
+            System.out.println("auth 대입");
+            // 2. UserDetails 로드
+            UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+
+            // 3. Principal에 userDetails 객체와 userDetails의 authorities 주입
             Authentication auth = new UsernamePasswordAuthenticationToken(
-                    claims.getSubject(), // username
+                    userDetails,
                     null,
-                    AuthorityUtils.createAuthorityList("ROLE_USER")
+                    userDetails.getAuthorities()
             );
+            System.out.println("SecurityContextHolder 처리");
             SecurityContextHolder.getContext().setAuthentication(auth);
+            System.out.println("완료");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             SecurityContextHolder.clearContext(); // 에러로 인해서 인증 정보 꼬이는 걸 배제
@@ -59,12 +72,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 StringUtils.hasText(authHeader)
                         && authHeader.startsWith("Bearer ")
         ) {
+            System.out.println("Header에서 토큰 추출");
             return authHeader.substring(7);
             // Bearer {...}
         }
         // 2. Cookie
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
+            System.out.println("Cookie에서 토큰 추출");
             return Arrays.stream(cookies) // 쿠키 배열을 stream
                     .filter(cookie -> cookie.getName().equals("accessToken"))
                     // filter -> accessToken 쿠키 이름으로 필터링

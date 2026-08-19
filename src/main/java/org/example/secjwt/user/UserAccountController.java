@@ -1,5 +1,6 @@
 package org.example.secjwt.user;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.example.secjwt.auth.AuthCookieUtil;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/test")
+    @SecurityRequirement(name = "bearerAuth")
     public String test() {
         return "test";
     }

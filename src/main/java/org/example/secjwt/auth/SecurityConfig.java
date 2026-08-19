@@ -38,7 +38,6 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         ))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 // 경로 보안
                 .authorizeHttpRequests(
                         authz -> authz
@@ -53,7 +52,12 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         HttpMethod.POST, "/user/login")
                                 .permitAll()
-                );
+                                .anyRequest()
+                                .authenticated()
+                )
+                // 필터 추가
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
         // 예외 처리
         // .exceptionHandling()
         return http.build();
@@ -72,4 +76,5 @@ public class SecurityConfig {
         );
         return new DelegatingPasswordEncoder(p.encodingId(), encoderMap);
     }
+
 }

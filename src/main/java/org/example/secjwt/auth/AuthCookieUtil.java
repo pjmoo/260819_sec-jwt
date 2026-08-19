@@ -16,6 +16,7 @@ public class AuthCookieUtil {
                         "accessToken", token
                 ).httpOnly(true)
                 .secure(true) // https - http://localhost
+                .sameSite("Strict")
                 .maxAge(p.jwt().accessExpiry())
                 .build();
     }
