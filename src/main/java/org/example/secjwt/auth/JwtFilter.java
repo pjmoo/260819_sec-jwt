@@ -1,6 +1,7 @@
 package org.example.secjwt.auth;
 
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -29,6 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println("token = " + token);
             // 추출한 정보를 바탕으로 AuthToken을 넘기는 역할
             String username = extractUsername(token); // role
+            System.out.println("username = " + username);
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(
                             username, null,
@@ -60,7 +62,13 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 
+    private final JwtProvider jwtProvider;
+
+    // extractPayload...?
     private String extractUsername(String token) {
-        return null;
+        Claims claims = jwtProvider.parseClaims(token);
+        String username = claims.getSubject();
+        return username;
+        // role -> dto => ClaimsDTO(username, role) ...
     }
 }

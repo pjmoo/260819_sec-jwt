@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class UserAccountController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/test")
-    public String test() {
-        return "test";
+    public ResponseEntity<String> test(Authentication authentication) {
+        return ResponseEntity.ok().body(authentication.getName());
     }
 }
