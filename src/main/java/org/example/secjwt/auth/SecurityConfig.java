@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthProperties p; // 주입받을 수 있음
+    private final JwtFilter jwtFilter;
 
     // SecurityFilterChain
     @Bean
@@ -36,6 +38,7 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         ))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 // 경로 보안
                 .authorizeHttpRequests(
                         authz -> authz
