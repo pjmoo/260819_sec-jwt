@@ -42,6 +42,9 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         HttpMethod.POST, "/user/signup")
                                 .permitAll()
+                                .requestMatchers(
+                                        HttpMethod.POST, "/user/login")
+                                .permitAll()
                 );
         // 예외 처리
         // .exceptionHandling()

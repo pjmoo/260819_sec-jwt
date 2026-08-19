@@ -22,4 +22,13 @@ public class UserAccountController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(saved);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(
+            @Validated @RequestBody LoginRequestDTO dto
+    ) {
+        String token = userAccountService.login(dto.username(), dto.password());
+        return ResponseEntity.ok()
+                .body(new LoginResponseDTO(token));
+    }
 }
