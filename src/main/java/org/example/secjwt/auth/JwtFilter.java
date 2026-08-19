@@ -47,6 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (StringUtils.hasText(authHeader)
                 && authHeader.startsWith("Bearer ")) {
+            System.out.println("header");
             return authHeader.substring(7); // "Bearer "
         }
 
@@ -55,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("accessToken")) {
+                    System.out.println("cookie");
                     return cookie.getValue();
                 }
             }

@@ -18,6 +18,7 @@ public class AuthCookieUtil {
                 .secure(true) // https - http://localhost
                 .sameSite("Strict")
                 .maxAge(p.jwt().accessExpiry())
+                .path("/") // 추가
                 .build();
     }
 }

@@ -30,7 +30,10 @@
             },
             body: JSON.stringify({username, password})
         });
-        console.log(response.json());
+        if (response.ok) {
+            location.href = "/my";
+        }
+        // console.log(await response.json());
     })
 </script>
 </body>
