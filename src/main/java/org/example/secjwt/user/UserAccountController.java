@@ -37,8 +37,8 @@ public class UserAccountController {
                 .body(new LoginResponseDTO(token));
     }
 
-    @GetMapping("/test")
     @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/test")
     public String test() {
         return "test";
     }
