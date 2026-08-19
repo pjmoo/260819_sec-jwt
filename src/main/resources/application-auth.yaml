@@ -2,6 +2,9 @@ app:
   auth:
     # argon2, scrypt, bcrypt
     encoding-id: argon2
+    jwt:
+      secret: ${JWT_SECRET}
+      accessExpiry: 15m
 ---
 spring:
   config:
