@@ -9,4 +9,5 @@ import org.springframework.stereotype.Component;
 @EnableConfigurationProperties(AuthProperties.class)
 public class JwtFilter {
     private final AuthProperties p;
+    private final JwtProvider jwtProvider; // claims 해석이 가능
 }

@@ -1,5 +1,6 @@
 package org.example.secjwt.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,14 @@ public class JwtProvider {
                 .expiration(expiry) // 만료시간
                 .signWith(getSecretKey())
                 .compact();
+    }
+
+    public Claims parseClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                // jwt 관련된 exception이 난다
+                .getPayload();
     }
 }
