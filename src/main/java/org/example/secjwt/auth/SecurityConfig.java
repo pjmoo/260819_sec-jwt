@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
 
@@ -53,11 +54,15 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
+                // 필터
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;
         // 예외 처리
         // .exceptionHandling()
         return http.build();
     }
+
+    private final JwtFilter jwtFilter;
 
     // PasswordEncoder - 가입하고 DB 저장될 때 해싱해서 암호화된 비밀번호를 저장
     @Bean
